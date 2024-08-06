@@ -126,8 +126,6 @@
                 did not authorize the use of the content you must notify Logo-logos.com in writing in order for us to
                 identify the allegedly infringing content and take action. For any problems or questions please email us
                 at mail@logo-logos.com.</p>
-
-
         </article>
     </section>
 </main>

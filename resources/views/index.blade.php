@@ -25,16 +25,6 @@
     <section class="section" itemscope itemtype="http://schema.org/Article">
         <article class="article" itemprop="articleBody">
             <h1 itemprop="headline">Logos, brands and logotypes</h1>
-            <!-- all - adaptiv -->
-            <ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9384619306632558"
-     data-ad-slot="7191112461"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
             <div class="pagination">{{ $logos->links('include.simple-pagination') }}</div>
             <div class="logos">
                 @foreach ($logos as $logo)
@@ -45,16 +35,6 @@
                     </div>
                 @endforeach
             </div>
-            <!-- all - adaptiv -->
-            <ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9384619306632558"
-     data-ad-slot="7191112461"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
         </article>
     </section>
     @include('include.aside')

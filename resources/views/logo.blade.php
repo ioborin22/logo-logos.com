@@ -26,16 +26,7 @@
         <article class="article" itemprop="articleBody">
             <h1 itemprop="headline">{{$logo[0]->post_title}} logo download for free</h1>
             <p><a href="{{ url()->previous() }}">{{ __('Back') }}</a></p>
-            <!-- all - adaptiv -->
-            <ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9384619306632558"
-     data-ad-slot="7191112461"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+
             <p>{{$logo[0]->post_title}} logo photos and pictures in HD resolution from {{$logo[0]->categories_name}}
                 category</p>
             <p>{{$logo[0]->post_title}} logotype pictures in high resolution quality available to download for free</p>
@@ -46,30 +37,11 @@
             <p>Right click to free download this logo of the "{{$logo[0]->post_title}}" brand to your computer</p>
             <p>See other logos in the category: <a
                     href="/category/{{$logo[0]->categories_slug}}">{{$logo[0]->categories_name}}</a></p>
-            <!-- all - adaptiv -->
-            <ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9384619306632558"
-     data-ad-slot="7191112461"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+
             <h4>HTML Embed Code full size Logo</h4>
             <label for=""></label><textarea name="" id="" cols="30" rows="5"><img src="{{asset('')}}{!! $logo[0]->img !!}" alt="{{$logo[0]->post_title}} logo, logotype"></textarea>
             <section class="related">
                 <h2>{{__('Maybe try one of the links below or a search?')}}</h2>
-                <!-- all - adaptiv -->
-                <ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9384619306632558"
-     data-ad-slot="7191112461"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
                 <div>
                     <h4>Search</h4>
                 </div>
