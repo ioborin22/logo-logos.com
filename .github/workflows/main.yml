@@ -21,9 +21,6 @@ jobs:
           source: "."
           target: "/var/www/html/logo-logos.com"
           strip_components: 1
-          excludes: |
-            .git/**
-            .github/**
 
       - name: Final Setup on Server
         uses: appleboy/ssh-action@master

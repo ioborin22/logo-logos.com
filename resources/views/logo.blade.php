@@ -54,7 +54,6 @@
                         </div>
                     @endforeach
                 </div>
-                <a target="_blank" href="https://getwab.com/register"><figure><img height="150" src="https://ruogp.me/getwab.gif" alt="GETWAB free dating and chat" ><figcaption>GETWAB.COM Free Dating</figcaption></figure></a>
             </section>
         </article>
     </section>
