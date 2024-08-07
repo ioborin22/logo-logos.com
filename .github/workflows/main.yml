@@ -32,3 +32,6 @@ jobs:
           script: |
             # Restart web server if needed
             sudo systemctl restart apache2
+            # Remove .git and .github directories
+            sudo rm -rf /var/www/html/logo-logos.com/.git
+            sudo rm -rf /var/www/html/logo-logos.com/.github
