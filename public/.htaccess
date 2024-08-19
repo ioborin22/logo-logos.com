@@ -3,9 +3,7 @@
         Options -MultiViews -Indexes
     </IfModule>
 
-    RewriteEngine On
-
-
+RewriteEngine On
 RewriteCond %{HTTP_HOST} ^www\.logo-logos\.com$ [NC]
 RewriteRule ^(.*)$ https://logo-logos.com/$1 [R=301,L]
 

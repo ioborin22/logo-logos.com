@@ -35,3 +35,5 @@ jobs:
             # Remove .git and .github directories
             sudo rm -rf /var/www/html/logo-logos.com/.git
             sudo rm -rf /var/www/html/logo-logos.com/.github
+            sudo chown -R www-data:www-data /var/www/html/logo-logos.com/storage
+            sudo chmod -R 775 /var/www/html/logo-logos.com/storage
