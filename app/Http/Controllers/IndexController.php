@@ -4,24 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class IndexController extends Controller
 {
     public function index()
     {
+        $logos = Cache::rememberForever('logos.index', function () {
+            return DB::table('posts')
+                ->join('relationships', 'posts.id', '=', 'relationships.post_id')
+                ->join('images', 'posts.id', '=', 'images.post_id')
+                ->join('links', 'posts.id', '=', 'links.object_id')
+                ->join('categories', 'categories.id', '=', 'relationships.category_id')
+                ->select('posts.post_title', 'images.img', 'links.slug', 'categories.categories_slug', 'categories.categories_name')
+                ->where('images.size', '=', 'small')
+                ->inRandomOrder()
+                ->paginate(24);
+        });
 
-        $logos = DB::table('posts')
-            ->join('relationships', 'posts.id', '=', 'relationships.post_id')
-            ->join('images', 'posts.id', '=', 'images.post_id')
-            ->join('links', 'posts.id', '=', 'links.object_id')
-            ->join('categories', 'categories.id', '=', 'relationships.category_id')
-            ->select('posts.post_title', 'images.img', 'links.slug', 'categories.categories_slug', 'categories.categories_name')
-            ->where('images.size', '=', 'small')
-            ->inRandomOrder()
-            ->paginate(24);
-
-        $categories = DB::table('categories')
-            ->get();
+        $categories = Cache::rememberForever('categories.all', function () {
+            return DB::table('categories')->get();
+        });
 
         return view('index', compact(['logos', 'categories']));
     }
@@ -31,35 +34,40 @@ class IndexController extends Controller
         $result = DB::table('links')->where('slug', $slug)->get();
 
         if ($result->isNotEmpty()) {
+            $logo = Cache::rememberForever("logo.{$slug}", function () use ($result) {
+                return DB::table('posts')
+                    ->join('relationships', 'posts.id', '=', 'relationships.post_id')
+                    ->join('categories', 'categories.id', '=', 'relationships.category_id')
+                    ->join('images', 'posts.id', '=', 'images.post_id')
+                    ->join('links', 'posts.id', '=', 'links.object_id')
+                    ->select('posts.id', 'posts.post_title', 'images.img', 'links.slug', 'categories.categories_name', 'categories.categories_slug')
+                    ->where('images.size', '=', 'full')
+                    ->where('relationships.post_id', '=', $result[0]->object_id)
+                    ->where('posts.id', '=', $result[0]->object_id)
+                    ->get();
+            });
 
-            $logo = DB::table('posts')
-                ->join('relationships', 'posts.id', '=', 'relationships.post_id')
-                ->join('categories', 'categories.id', '=', 'relationships.category_id')
-                ->join('images', 'posts.id', '=', 'images.post_id')
-                ->join('links', 'posts.id', '=', 'links.object_id')
-                ->select('posts.id', 'posts.post_title', 'images.img', 'links.slug', 'categories.categories_name', 'categories.categories_slug')
-                ->where('images.size', '=', 'full')
-                ->where('relationships.post_id', '=', $result[0]->object_id)
-                ->where('posts.id', '=', $result[0]->object_id)
-                ->get();
+            if ($logo === null) {
+                return redirect()->route('/');
+            }
 
-            if($logo === null) { return redirect()->route('/'); }
+            $categories = Cache::rememberForever('categories.all', function () {
+                return DB::table('categories')->get();
+            });
 
-            $categories = DB::table('categories')
-                ->get();
-
-            $related = DB::table('posts')
-                ->join('relationships', 'posts.id', '=', 'relationships.post_id')
-                ->join('categories', 'categories.id', '=', 'relationships.category_id')
-                ->join('images', 'posts.id', '=', 'images.post_id')
-                ->join('links', 'posts.id', '=', 'links.object_id')
-                ->select('posts.id', 'posts.post_title', 'images.img', 'links.slug', 'categories.categories_name', 'categories.categories_slug')
-                ->where('images.size', '=', 'small')
-                ->where('relationships.post_id', '!=', $result[0]->object_id)
-                ->where('posts.id', '!=', $result[0]->object_id)
-                ->inRandomOrder()
-                ->paginate(9);
-
+            $related = Cache::rememberForever("related.{$slug}", function () use ($result) {
+                return DB::table('posts')
+                    ->join('relationships', 'posts.id', '=', 'relationships.post_id')
+                    ->join('categories', 'categories.id', '=', 'relationships.category_id')
+                    ->join('images', 'posts.id', '=', 'images.post_id')
+                    ->join('links', 'posts.id', '=', 'links.object_id')
+                    ->select('posts.id', 'posts.post_title', 'images.img', 'links.slug', 'categories.categories_name', 'categories.categories_slug')
+                    ->where('images.size', '=', 'small')
+                    ->where('relationships.post_id', '!=', $result[0]->object_id)
+                    ->where('posts.id', '!=', $result[0]->object_id)
+                    ->inRandomOrder()
+                    ->paginate(9);
+            });
 
             return view('logo', compact(['logo', 'categories', 'related']));
         } else {
@@ -72,26 +80,26 @@ class IndexController extends Controller
         $category = DB::table('categories')->where('categories_slug', $slug)->get();
 
         if ($category->isNotEmpty()) {
+            $logos = Cache::rememberForever("logos.category.{$slug}", function () use ($category) {
+                return DB::table('posts')
+                    ->join('relationships', 'posts.id', '=', 'relationships.post_id')
+                    ->join('categories', 'categories.id', '=', 'relationships.category_id')
+                    ->join('images', 'posts.id', '=', 'images.post_id')
+                    ->join('links', 'posts.id', '=', 'links.object_id')
+                    ->select('posts.id', 'posts.post_title', 'images.img', 'links.slug', 'categories.categories_name', 'categories.categories_slug')
+                    ->where('images.size', '=', 'small')
+                    ->where('relationships.category_id', '=', $category[0]->id)
+                    ->paginate(18);
+            });
 
-            $logos = DB::table('posts')
-                ->join('relationships', 'posts.id', '=', 'relationships.post_id')
-                ->join('categories', 'categories.id', '=', 'relationships.category_id')
-                ->join('images', 'posts.id', '=', 'images.post_id')
-                ->join('links', 'posts.id', '=', 'links.object_id')
-                ->select('posts.id', 'posts.post_title', 'images.img', 'links.slug', 'categories.categories_name', 'categories.categories_slug')
-                ->where('images.size', '=', 'small')
-                ->where('relationships.category_id', '=', $category[0]->id)
-                ->paginate(18);
-
-
-            $categories = DB::table('categories')
-                ->get();
+            $categories = Cache::rememberForever('categories.all', function () {
+                return DB::table('categories')->get();
+            });
 
             return view('category', compact(['logos', 'categories', 'category']));
         } else {
             abort(404);
         }
-
     }
 
     public function contact(Request $request)

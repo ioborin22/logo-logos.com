@@ -9,3 +9,11 @@
     <link href="{{asset('images/logo-logos.png')}}" rel="apple-touch-icon" sizes="76x76">
     <link href="{{asset('images/logo-logos.png')}}" rel="apple-touch-icon" sizes="120x120">
     <link href="{{asset('images/logo-logos.png')}}" rel="apple-touch-icon" sizes="152x152">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y01P66XY3K"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Y01P66XY3K');
+    </script>
