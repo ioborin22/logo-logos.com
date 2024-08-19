@@ -80,26 +80,26 @@ class IndexController extends Controller
         $category = DB::table('categories')->where('categories_slug', $slug)->get();
 
         if ($category->isNotEmpty()) {
+            $logos = Cache::rememberForever("logos.category.{$slug}", function () use ($category) {
+                return DB::table('posts')
+                    ->join('relationships', 'posts.id', '=', 'relationships.post_id')
+                    ->join('categories', 'categories.id', '=', 'relationships.category_id')
+                    ->join('images', 'posts.id', '=', 'images.post_id')
+                    ->join('links', 'posts.id', '=', 'links.object_id')
+                    ->select('posts.id', 'posts.post_title', 'images.img', 'links.slug', 'categories.categories_name', 'categories.categories_slug')
+                    ->where('images.size', '=', 'small')
+                    ->where('relationships.category_id', '=', $category[0]->id)
+                    ->paginate(18);
+            });
 
-            $logos = DB::table('posts')
-                ->join('relationships', 'posts.id', '=', 'relationships.post_id')
-                ->join('categories', 'categories.id', '=', 'relationships.category_id')
-                ->join('images', 'posts.id', '=', 'images.post_id')
-                ->join('links', 'posts.id', '=', 'links.object_id')
-                ->select('posts.id', 'posts.post_title', 'images.img', 'links.slug', 'categories.categories_name', 'categories.categories_slug')
-                ->where('images.size', '=', 'small')
-                ->where('relationships.category_id', '=', $category[0]->id)
-                ->paginate(18);
-
-
-            $categories = DB::table('categories')
-                ->get();
+            $categories = Cache::rememberForever('categories.all', function () {
+                return DB::table('categories')->get();
+            });
 
             return view('category', compact(['logos', 'categories', 'category']));
         } else {
             abort(404);
         }
-
     }
 
     public function contact(Request $request)
